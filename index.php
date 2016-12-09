@@ -9,7 +9,7 @@
     <title>Insta-Conga!</title>
     <link rel="stylesheet" href="main.css">
     <script type="text/JavaScript">
-    var INSTACONGA = {'host': <?php echo $ws_host; ?>};
+    var INSTACONGA = {'host': '<?php echo $ws_host; ?>'};
     </script>
 </head>
 <body>
