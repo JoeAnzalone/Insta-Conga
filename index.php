@@ -1,3 +1,7 @@
+<?php
+    $config = parse_ini_file('.env');
+    $ws_host = $config['WS_HOST'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +9,7 @@
     <title>Insta-Conga!</title>
     <link rel="stylesheet" href="main.css">
     <script type="text/JavaScript">
-    var INSTACONGA = {'host': '0.0.0.0:8081'};
+    var INSTACONGA = {'host': <?php echo $ws_host; ?>};
     </script>
 </head>
 <body>
