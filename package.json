@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/JoeAnzalone/Insta-Conga/issues"
   },
-  "homepage": "https://github.com/JoeAnzalone/Insta-Conga#readme"
+  "homepage": "https://github.com/JoeAnzalone/Insta-Conga#readme",
+  "dependencies": {
+    "ws": "^1.1.1"
+  }
 }
