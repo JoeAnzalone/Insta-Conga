@@ -1,5 +1,6 @@
 var saved_audio = {};
 var ws;
+var now_playing = new Audio();
 
 function loadAudio(data) {
     var slug = data.slug;
@@ -7,22 +8,39 @@ function loadAudio(data) {
     var audio = new Audio(url);
     audio.src = url;
     saved_audio[slug] = url;
-
 }
 
 function reload(data) {
     window.location.reload();
 }
 
-function play(data) {
+function playNew(data) {
+    now_playing.pause();
+
+    if (typeof saved_audio[data.slug] !== 'string') {
+        return;
+    }
+
     var url = saved_audio[data.slug];
-    var audio = new Audio(url);
-    audio.src = url;
-    audio.play();
+    now_playing.src = url;
+
+    if (now_playing.readyState === HTMLMediaElement.HAVE_ENOUGH_DATA) {
+        now_playing.play();
+        now_playing.currentTime = 0;
+    }
+}
+
+function play(data) {
+    now_playing.play();
 }
 
 function stop(data) {
-    reload();
+    now_playing.pause();
+    now_playing.currentTime = 0;
+}
+
+function pause(data) {
+    now_playing.pause();
 }
 
 function showAlert(data) {
@@ -52,11 +70,12 @@ function connect() {
 
     ws.addEventListener('message', function (event) {
         var data = JSON.parse(event.data);
-
         var routes = {
-            'play': play,
+            'playNew': playNew,
+            'pause': pause,
             'stop': stop,
             'reload': reload,
+            'update': update,
             'showAlert': showAlert,
         };
 
@@ -64,6 +83,24 @@ function connect() {
             routes[data.route](data);
         }
     });
+}
+
+function update(data) {
+    if (typeof saved_audio[data.slug] !== 'string') {
+        return;
+    }
+
+    var url = saved_audio[data.slug];
+
+    if (now_playing.src !== url) {
+        now_playing.src = url;
+    }
+
+    if (now_playing.readyState === HTMLMediaElement.HAVE_ENOUGH_DATA) {
+        // Don't bother updating yet if audio isn't done downloading
+        now_playing.currentTime = data.currentTime;
+        now_playing.play();
+    }
 }
 
 window.setInterval(function check() {
