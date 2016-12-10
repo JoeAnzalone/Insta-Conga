@@ -12,7 +12,6 @@ function loadAudio(data) {
 
 function reload(data) {
     window.location.reload();
-
 }
 
 function play(data) {
@@ -20,7 +19,6 @@ function play(data) {
     var audio = new Audio(url);
     audio.src = url;
     audio.play();
-
 }
 
 function stop(data) {
